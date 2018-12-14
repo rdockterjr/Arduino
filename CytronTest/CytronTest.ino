@@ -1,5 +1,8 @@
 #include <Cytron.h>
 
+//https://www.cytron.io/c-93-dc-motor-driver/dc-motor-driver/p-md30c
+//https://docs.google.com/document/d/178uDa3dmoG0ZX859rWUOS2Xyafkd8hSsSET5-ZLXMYQ/view
+
 int pwmpin1 = 11;
 int dirpin1 = 12;
 
