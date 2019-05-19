@@ -1,5 +1,5 @@
 /*
-  Cytron.h - Library for controlling motors with Cytron MD30C
+  ESC.h - Library for controlling brushless motors with ESC
   Created by Rod Dockter, December 13, 2018.
 */
 //https://www.pjrc.com/teensy/td_pulse.html
@@ -8,26 +8,25 @@
 //FTM2	29, 30
 //FTM3	2, 7, 8, 14, 35, 36, 37, 38
 
-#ifndef Cytron_h
-#define Cytron_h
+#ifndef ESC_h
+#define ESC_h
 
 #include "Arduino.h"
+#include "Servo.h" //used for esc control
 
-#define MAX_PWM_10_BIT 1023
+#define MAX_ESC 100 
+#define MIN_ESC 0
 
-class Cytron
+class ESC
 {
   public:
-    Cytron(int pwmpin, int dirpin, int forwarddir);
-		void SetFrequency(int hz);
+    ESC(int pwmpin);
     void Init();
     void Control(int pwm_10bit);
   private:
     int _pwmpin;
-		int _dirpin;
 		int _lastpwm;
-		int _lastdir;
-		int _forwarddir;
+		Servo ESC_Servo;
 };
 
 #endif
