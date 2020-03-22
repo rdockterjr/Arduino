@@ -27,17 +27,17 @@ uint8_t year = 20;
 uint8_t seconds = 00;
 uint8_t minutes = 00;
 uint8_t hours = 12;
-uint8_t increment = 15; // every 15 minutes
+uint8_t increment = 10; // every 15 minutes
 
 //values
-bool alarm_state, last_alarm_state, send_request;
+bool alarm_state, last_alarm_state, interrupt;
 unsigned int alarm_count;
 
 void setup() {
   //initialize states
   alarm_state = false;
   last_alarm_state = false;
-  send_request = false;
+  interrupt = false;
   alarm_count = 0;
 
   // float switch
@@ -60,22 +60,24 @@ void setup() {
   rtc.setAlarmTime(0, minutes, 0);    //Every Five Minutes
   rtc.enableAlarm(rtc.MATCH_MMSS);
   rtc.attachInterrupt(IntervalCallback);
+  rtc.standbyMode();
 }
 
 void IntervalCallback() {
-  send_request = true;
+  interrupt = true;
 }
 
 void loop() {
   //run this every interval
-  if(send_request){
-    send_request = false;
+  if(interrupt){
+    interrupt = false;
     WifiConnect();
     alarm_state = ReadFloatSwitch();
     SetPhysicalAlert();
     SendWifiAlert();
     WifiDisconnect();
     UpdateAlarmTime();
+    rtc.standbyMode();
   }
 }
 
@@ -210,5 +212,6 @@ void UpdateAlarmTime(){
   minutes = (minutes + increment) % 60;
   rtc.setAlarmTime(00,minutes,00);
   rtc.enableAlarm(rtc.MATCH_MMSS);
+  digitalWrite(LED_PIN, LOW); //Set LED low first
 }
 
